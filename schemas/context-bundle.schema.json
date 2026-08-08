@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/context-bundle.schema.json",
+  "title": "Context Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "created_at",
+    "agent",
+    "project",
+    "profiles",
+    "knowledge",
+    "included_sources",
+    "excluded_by_default",
+    "warnings",
+    "estimated_tokens"
+  ],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "context_bundle" },
+    "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "agent": { "type": "string", "minLength": 1 },
+    "task": { "type": "string", "minLength": 1 },
+    "project": { "$ref": "project.schema.json" },
+    "profiles": {
+      "type": "array",
+      "items": { "$ref": "context.schema.json" }
+    },
+    "knowledge": {
+      "type": "array",
+      "items": { "$ref": "knowledge.schema.json" }
+    },
+    "included_sources": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "excluded_by_default": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "estimated_tokens": { "type": "integer", "minimum": 0 }
+  }
+}

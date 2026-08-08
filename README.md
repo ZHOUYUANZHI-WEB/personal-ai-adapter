@@ -110,6 +110,14 @@ pai process <inbox-id> --to project
 pai process <inbox-id> --to knowledge --title "Structured agent handoff"
 ```
 
+Assemble the minimum context for a Project and Agent:
+
+```bash
+pai context <project-id> --agent codex
+```
+
+Only the requested Project, matching Context Profiles, and explicitly linked Knowledge are included. See [Context Assembly](docs/context-assembly.md) for selection and exclusion rules.
+
 By default, data is written to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory.
 
 Run the automated checks with:
@@ -144,7 +152,7 @@ src/        Future reference implementation
 
 ## Project status
 
-**Experimental / pre-v0.1.** The architecture and first schema contracts are being stabilized before the reference implementation is built.
+**Experimental / pre-v0.2.** The local-first capture loop is implemented, and minimal context assembly is being stabilized.
 
 Current milestone:
 
@@ -154,7 +162,7 @@ Current milestone:
 - [x] Initial schemas
 - [x] Local-first capture CLI
 - [x] Inbox processing loop
-- [ ] Minimal context assembler
+- [x] Minimal context assembler
 - [ ] Structured agent handoff demo
 - [ ] Todoist adapter
 

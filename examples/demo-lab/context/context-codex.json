@@ -1,0 +1,20 @@
+{
+  "id": "context-codex",
+  "type": "context",
+  "applies_to": "agent",
+  "target": "codex",
+  "priority": 20,
+  "instructions": [
+    "Implement engineering changes and verify them with proportionate tests."
+  ],
+  "preferences": [
+    "Use local-first, portable formats."
+  ],
+  "constraints": [
+    "Preserve unrelated working tree changes."
+  ],
+  "prohibited_actions": [
+    "Do not commit credentials or private AI Lab data."
+  ],
+  "updated_at": "2026-08-08T09:30:00Z"
+}
