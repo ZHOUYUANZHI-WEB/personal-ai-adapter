@@ -4,26 +4,64 @@
   "title": "Agent Handoff",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "type", "created_at", "from_agent", "objective", "current_state", "completed", "remaining", "risks", "required_permissions"],
+  "required": [
+    "id",
+    "type",
+    "created_at",
+    "from_agent",
+    "project",
+    "objective",
+    "current_state",
+    "completed",
+    "remaining",
+    "artifacts",
+    "decisions",
+    "risks",
+    "required_permissions"
+  ],
   "properties": {
     "id": { "$ref": "common.schema.json#/$defs/stableId" },
     "type": { "const": "handoff" },
     "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
     "from_agent": { "$ref": "common.schema.json#/$defs/actor" },
     "recommended_next_agent": { "$ref": "common.schema.json#/$defs/actor" },
-    "project": { "$ref": "common.schema.json#/$defs/uriOrReference" },
-    "objective": { "type": "string", "minLength": 1 },
-    "current_state": { "type": "string", "minLength": 1 },
-    "completed": { "type": "array", "items": { "type": "string" } },
-    "remaining": { "type": "array", "items": { "type": "string" } },
+    "project": {
+      "type": "string",
+      "pattern": "^project:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "objective": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "current_state": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "completed": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
+    "remaining": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
     "artifacts": {
       "type": "array",
-      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
-      "uniqueItems": true
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 },
+      "uniqueItems": true,
+      "maxItems": 100
     },
-    "decisions": { "type": "array", "items": { "type": "string" } },
-    "risks": { "type": "array", "items": { "type": "string" } },
-    "required_permissions": { "type": "array", "items": { "type": "string" } }
+    "decisions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
+    "risks": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
+    "required_permissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+    }
   }
 }
-

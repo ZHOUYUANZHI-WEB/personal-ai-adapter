@@ -91,6 +91,35 @@ export interface ContextBundle {
   estimated_tokens: number;
 }
 
+export interface HandoffArtifact {
+  id: string;
+  type: "handoff";
+  created_at: string;
+  from_agent: string;
+  recommended_next_agent?: string;
+  project: string;
+  objective: string;
+  current_state: string;
+  completed: string[];
+  remaining: string[];
+  artifacts: string[];
+  decisions: string[];
+  risks: string[];
+  required_permissions: string[];
+}
+
+export type HandoffPayload = Pick<
+  HandoffArtifact,
+  | "objective"
+  | "current_state"
+  | "completed"
+  | "remaining"
+  | "artifacts"
+  | "decisions"
+  | "risks"
+  | "required_permissions"
+>;
+
 export type ProcessDestination = "project" | "knowledge";
 
 export interface ProcessResult {

@@ -1,0 +1,27 @@
+{
+  "objective": "Continue implementing the Personal AI Adapter without relying on previous chat history.",
+  "current_state": "Capture and minimal Context Assembly are implemented and verified.",
+  "completed": [
+    "Implemented local-first Capture and Inbox processing",
+    "Implemented Project- and Agent-scoped Context Bundles"
+  ],
+  "remaining": [
+    "Review the Agent Handoff protocol",
+    "Decide whether the next milestone should add a Markdown Vault Store"
+  ],
+  "artifacts": [
+    "file:src/handoff.ts",
+    "file:docs/agent-handoff-specification-v0.1.md"
+  ],
+  "decisions": [
+    "Agents share structured state, not conversation transcripts",
+    "OpenClaw, Codex, and Claude remain consumers rather than core dependencies"
+  ],
+  "risks": [
+    "The receiving Agent may not have permission to read every referenced artifact"
+  ],
+  "required_permissions": [
+    "read:project",
+    "read:artifacts"
+  ]
+}
