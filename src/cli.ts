@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+import fs from "node:fs/promises";
 import path from "node:path";
 import { capture } from "./capture.js";
 import { assembleContext } from "./context.js";
+import { asHandoffPayload, createHandoff, readHandoff } from "./handoff.js";
 import { processInboxItem } from "./process.js";
 import type { ProcessDestination } from "./types.js";
 
@@ -44,10 +46,25 @@ function usage(): string {
     "  pai capture \"<text>\" [--lab <path>]",
     "  pai process <inbox-id> --to <project|knowledge> [--title <title>] [--lab <path>]",
     "  pai context <project-id> --agent <agent> [--task <task>] [--knowledge-limit <number>] [--lab <path>]",
+    "  pai handoff create --project <project-id> --from <agent> --input <file|-> [--to <agent>] [--lab <path>]",
+    "  pai handoff read <handoff-id> [--lab <path>]",
     "",
     "Environment:",
     "  PAI_LAB  Default AI Lab path (otherwise ./lab)"
   ].join("\n");
+}
+
+async function readStandardInput(): Promise<string> {
+  process.stdin.setEncoding("utf8");
+  let content = "";
+  for await (const chunk of process.stdin) {
+    content += chunk;
+  }
+  return content;
+}
+
+function parseJsonInput(content: string): unknown {
+  return JSON.parse(content.replace(/^\uFEFF/, "")) as unknown;
 }
 
 async function main(): Promise<void> {
@@ -115,6 +132,52 @@ async function main(): Promise<void> {
     });
     console.log(JSON.stringify(bundle, null, 2));
     return;
+  }
+
+  if (command === "handoff") {
+    const action = parsed.positional[0];
+
+    if (action === "create") {
+      const projectId = parsed.options.get("project");
+      const fromAgent = parsed.options.get("from");
+      const input = parsed.options.get("input");
+      if (!projectId) throw new Error("handoff create requires --project.");
+      if (!fromAgent) throw new Error("handoff create requires --from.");
+      if (!input) throw new Error("handoff create requires --input.");
+
+      const inputText = input === "-" ? await readStandardInput() : await fs.readFile(path.resolve(input), "utf8");
+      const payload = asHandoffPayload(parseJsonInput(inputText));
+      const nextAgent = parsed.options.get("to");
+      const result = await createHandoff(payload, {
+        labPath,
+        projectId,
+        fromAgent,
+        ...(nextAgent ? { recommendedNextAgent: nextAgent } : {})
+      });
+      console.log(
+        JSON.stringify(
+          {
+            id: result.handoff.id,
+            project: result.handoff.project,
+            from_agent: result.handoff.from_agent,
+            recommended_next_agent: result.handoff.recommended_next_agent ?? null,
+            path: result.path
+          },
+          null,
+          2
+        )
+      );
+      return;
+    }
+
+    if (action === "read") {
+      const handoffIdValue = parsed.positional[1];
+      if (!handoffIdValue) throw new Error("handoff read requires a Handoff ID.");
+      console.log(JSON.stringify(await readHandoff(handoffIdValue, labPath), null, 2));
+      return;
+    }
+
+    throw new Error("handoff requires create or read.");
   }
 
   throw new Error(`Unknown command: ${command}\n\n${usage()}`);

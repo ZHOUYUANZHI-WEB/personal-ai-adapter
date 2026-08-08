@@ -118,6 +118,25 @@ pai context <project-id> --agent codex
 
 Only the requested Project, matching Context Profiles, and explicitly linked Knowledge are included. See [Context Assembly](docs/context-assembly.md) for selection and exclusion rules.
 
+Create an immutable Agent Handoff without copying chat history:
+
+```bash
+pai handoff create \
+  --project project-personal-ai-adapter \
+  --from agent:codex \
+  --to agent:openclaw \
+  --input examples/handoff-input.json \
+  --lab examples/demo-lab
+```
+
+Read and validate it for the receiving Agent:
+
+```bash
+pai handoff read <handoff-id> --lab examples/demo-lab
+```
+
+See [Agent Handoff Specification v0.1](docs/agent-handoff-specification-v0.1.md) for producer, consumer, required-field, Project association, transcript-exclusion, and security rules.
+
 By default, data is written to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory.
 
 Run the automated checks with:
@@ -163,7 +182,7 @@ Current milestone:
 - [x] Local-first capture CLI
 - [x] Inbox processing loop
 - [x] Minimal context assembler
-- [ ] Structured agent handoff demo
+- [x] Structured agent handoff demo
 - [ ] Todoist adapter
 
 See the [Roadmap](docs/roadmap.md) for release milestones.

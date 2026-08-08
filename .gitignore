@@ -18,6 +18,7 @@ node_modules/
 dist/
 coverage/
 lab/
+examples/demo-lab/handoffs/
 
 # Editor and OS files
 .DS_Store
