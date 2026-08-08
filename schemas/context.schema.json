@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/context.schema.json",
+  "title": "Context Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "applies_to", "priority", "instructions", "constraints", "prohibited_actions", "updated_at"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "context" },
+    "applies_to": { "type": "string", "enum": ["global", "agent", "project", "task"] },
+    "target": { "type": "string" },
+    "priority": { "type": "integer", "minimum": 0 },
+    "instructions": { "type": "array", "items": { "type": "string" } },
+    "preferences": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "prohibited_actions": { "type": "array", "items": { "type": "string" } },
+    "source_links": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "updated_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "applies_to": { "enum": ["agent", "project", "task"] } },
+        "required": ["applies_to"]
+      },
+      "then": { "required": ["target"] }
+    }
+  ]
+}
+

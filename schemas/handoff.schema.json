@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/handoff.schema.json",
+  "title": "Agent Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "created_at", "from_agent", "objective", "current_state", "completed", "remaining", "risks", "required_permissions"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "handoff" },
+    "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "from_agent": { "$ref": "common.schema.json#/$defs/actor" },
+    "recommended_next_agent": { "$ref": "common.schema.json#/$defs/actor" },
+    "project": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+    "objective": { "type": "string", "minLength": 1 },
+    "current_state": { "type": "string", "minLength": 1 },
+    "completed": { "type": "array", "items": { "type": "string" } },
+    "remaining": { "type": "array", "items": { "type": "string" } },
+    "artifacts": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "decisions": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "required_permissions": { "type": "array", "items": { "type": "string" } }
+  }
+}
+

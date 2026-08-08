@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/integration.schema.json",
+  "title": "Integration Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "system", "authority", "read_scope", "write_scope", "sync_direction", "conflict_policy", "offline_behavior"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "integration" },
+    "system": { "type": "string", "minLength": 1 },
+    "authority": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "enum": ["ai_lab", "external", "derived"] }
+    },
+    "read_scope": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "write_scope": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "sync_direction": {
+      "type": "string",
+      "enum": ["read_only", "write_only", "bidirectional", "manual"]
+    },
+    "conflict_policy": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string" }
+    },
+    "offline_behavior": { "type": "string", "minLength": 1 },
+    "secret_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Names of secrets, never secret values."
+    },
+    "last_synced_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  }
+}
+

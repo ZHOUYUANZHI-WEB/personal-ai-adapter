@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/knowledge.schema.json",
+  "title": "Knowledge Item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "title", "status", "summary", "content", "sources", "confidence", "created_at", "updated_at", "created_by"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "knowledge" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": { "type": "string", "enum": ["draft", "verified", "deprecated", "archived"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "content": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "scope": { "type": "string" },
+    "confidence": { "$ref": "common.schema.json#/$defs/confidence" },
+    "created_by": { "$ref": "common.schema.json#/$defs/actor" },
+    "related_projects": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "related_knowledge": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "reviewed_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  }
+}
+

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/common.schema.json",
+  "title": "Personal AI Adapter Common Definitions",
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "uriOrReference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A user or agent identifier, for example user or agent:codex."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["confirmed", "inferred", "uncertain"]
+    }
+  }
+}
+

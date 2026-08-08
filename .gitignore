@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Runtime data (must be rebuildable)
+.runtime/
+cache/
+index/
+logs/
+tmp/
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Private AI Lab instances
+*-ai-lab/
+private-lab/
+

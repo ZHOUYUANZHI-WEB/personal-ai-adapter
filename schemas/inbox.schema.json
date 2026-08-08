@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/inbox.schema.json",
+  "title": "Inbox Item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "created_at", "source", "status", "content"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "inbox" },
+    "title": { "type": "string", "maxLength": 200 },
+    "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["user", "url", "email", "file", "agent", "external_system", "unknown"]
+        },
+        "reference": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+        "captured_by": { "$ref": "common.schema.json#/$defs/actor" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["new", "processing", "deferred", "resolved"]
+    },
+    "content": { "type": "string", "minLength": 1 },
+    "attachments": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "suggested_destination": {
+      "type": "string",
+      "enum": ["project", "knowledge", "asset", "archive", "delete"]
+    },
+    "resolved_to": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "defer_until": { "$ref": "common.schema.json#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "resolved" } }, "required": ["status"] },
+      "then": { "required": ["resolved_to"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "deferred" } }, "required": ["status"] },
+      "then": { "required": ["defer_until"] }
+    }
+  ]
+}
+

@@ -1,0 +1,12 @@
+{
+  "id": "inbox-20260808-001",
+  "type": "inbox",
+  "created_at": "2026-08-08T09:00:00Z",
+  "source": {
+    "kind": "user",
+    "captured_by": "user"
+  },
+  "status": "new",
+  "content": "Let different AI agents continue the same project without copying the entire chat history."
+}
+

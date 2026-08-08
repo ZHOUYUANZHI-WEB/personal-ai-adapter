@@ -1,0 +1,35 @@
+{
+  "id": "project-personal-ai-adapter",
+  "type": "project",
+  "title": "Personal AI Adapter",
+  "status": "active",
+  "objective": "Build a user-owned context layer for interchangeable AI agents.",
+  "scope": {
+    "included": [
+      "Portable data contracts",
+      "Low-friction capture",
+      "Minimal context assembly",
+      "Structured agent handoff"
+    ],
+    "excluded": [
+      "Autonomous multi-agent negotiation",
+      "A mandatory cloud service"
+    ]
+  },
+  "current_state": "The product boundary and first schema contracts are defined.",
+  "current_focus": "Validate the first schemas against a sanitized example AI Lab.",
+  "last_completed": "Separated the reusable adapter framework from a private AI Lab instance.",
+  "next_actions": [
+    "Add automated JSON Schema validation"
+  ],
+  "open_questions": [
+    "Which license should be used for the first public release?"
+  ],
+  "blockers": [],
+  "decisions": [],
+  "knowledge_links": [],
+  "asset_links": [],
+  "created_at": "2026-08-08T08:00:00Z",
+  "updated_at": "2026-08-08T09:30:00Z"
+}
+

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ZHOUYUANZHI-WEB/personal-ai-adapter/main/schemas/project.schema.json",
+  "title": "Project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "title", "status", "objective", "current_state", "next_actions", "created_at", "updated_at"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/stableId" },
+    "type": { "const": "project" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "active", "waiting", "blocked", "completed", "archived"]
+    },
+    "objective": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "included": { "type": "array", "items": { "type": "string" } },
+        "excluded": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "current_state": { "type": "string", "minLength": 1 },
+    "current_focus": { "type": "string" },
+    "last_completed": { "type": "string" },
+    "next_actions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "minLength": 1 },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reference", "authority"],
+            "properties": {
+              "reference": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+              "authority": { "type": "string", "minLength": 1 },
+              "label": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "open_questions": { "type": "array", "items": { "type": "string" } },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "decisions": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "knowledge_links": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "asset_links": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/uriOrReference" },
+      "uniqueItems": true
+    },
+    "external_refs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/uriOrReference" }
+    },
+    "created_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "last_reviewed_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  }
+}
+
