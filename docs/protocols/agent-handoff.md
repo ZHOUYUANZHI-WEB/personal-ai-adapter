@@ -1,4 +1,6 @@
-# Agent Handoff Specification v0.1 / 代理交接规范 v0.1
+# Agent Handoff Protocol v0.1
+
+Status: implemented in v0.3
 
 ## Status and purpose
 

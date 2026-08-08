@@ -1,4 +1,4 @@
-# Human Experience Principles
+# Human Experience
 
 Architecture exists to serve the person using it. Correct data flow is not sufficient if the system demands sustained attention, frequent categorization, or daily maintenance.
 
@@ -59,4 +59,3 @@ Users may configure information density, reminder frequency, task decomposition,
 | Low context load | Archive and unrelated Projects are excluded by default |
 | Low maintenance | Unprocessed items remain safe and do not block new capture |
 | Transparency | Suggested classification is distinguishable from user acceptance |
-

@@ -1,4 +1,6 @@
-# Context Assembly
+# Context Assembly Protocol
+
+Status: implemented in v0.2
 
 Context is generated for a specific Project, Agent, and optional task. It is a temporary bundle, not another long-term knowledge store.
 

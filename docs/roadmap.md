@@ -1,40 +1,57 @@
 # Roadmap
 
-## v0.1 — Local-first core
+## Completed foundations
 
-- Stabilize Inbox, Project, Knowledge, Context, Handoff, and Integration schemas.
-- Provide a sanitized example AI Lab.
-- Implement capture without mandatory classification.
-- Implement Inbox resolution into Project or Knowledge.
-- Validate all stored objects against schemas.
+### v0.1 - Local-first capture
 
-## v0.2 — Context assembly
+- Capture without mandatory classification
+- Inbox resolution into Project or Knowledge
+- JSON Schema validation
+- sanitized example AI Lab
 
-- Assemble minimal context by task, project, and agent.
-- Report included sources and exclusions.
-- Estimate context size.
-- Generate interruption recovery snapshots.
+### v0.2 - Context Assembly
 
-## v0.3 — Agent handoff
+- minimum Context by Agent, Project, and optional task
+- explicit included sources and default exclusions
+- multilingual-aware token estimate
+- bounded linked Knowledge
 
-- Produce and validate structured handoffs.
-- Demonstrate continuity across two different agents.
-- Add permission-aware execution records.
+### v0.3 - Agent Handoff
 
-## v0.4 — External operational state
+- immutable Project-linked Handoff Artifact
+- provider-neutral create/read commands
+- required state, Artifact, decision, risk, and permission fields
+- transcript exclusion and total size bound
 
-- Define a provider-neutral task interface.
-- Add local and mock task providers.
-- Add an optional Todoist adapter.
-- Implement authority-aware conflict handling.
+## Next
+
+### v0.4.0 - External Operational Systems protocol
+
+- Action Request Schema
+- External Reference Schema
+- Operation Receipt Schema
+- provider-neutral task contract
+- Mock Provider
+- explicit permission checks
+- idempotency and safe retry behavior
+
+No real external provider is required for v0.4.0.
+
+### v0.4.1 - Todoist Adapter
+
+- credential references without stored secret values
+- task create/read/complete through the stable provider contract
+- authority-aware state reads
+- operation receipts and failure handling
+- dry-run and explicit authorization
 
 ## Later
 
-- Calendar, email, and GitHub adapters
-- Rebuildable semantic retrieval
+- Calendar, GitHub, and Email Adapters
+- Markdown Vault Store and optional Obsidian interface
+- rebuildable semantic retrieval
 - Knowledge deduplication and contradiction detection
-- Optional graphical capture interface
-- Controlled automation under explicit permission policies
+- optional graphical capture interface
+- controlled automation under explicit policies
 
-Knowledge graphs, autonomous agent negotiation, and mandatory cloud storage are not planned until simpler workflows demonstrate a real need.
-
+Knowledge graphs, autonomous Agent negotiation, mandatory cloud storage, and provider-specific Core dependencies remain out of scope until simpler contracts demonstrate a real need.
