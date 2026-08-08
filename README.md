@@ -72,7 +72,7 @@ This repository contains schemas, specifications, and sanitized examples. It mus
 └──────────────────────────────────────────────────────────┘
 ```
 
-For the complete design, see [Architecture Specification](docs/architecture-specification.md).
+Start with the [Philosophy](docs/philosophy.md), then see the [Architecture](docs/architecture.md) and [Data Model](docs/data-model.md).
 
 ## The first workflow
 
@@ -116,7 +116,7 @@ Assemble the minimum context for a Project and Agent:
 pai context <project-id> --agent codex
 ```
 
-Only the requested Project, matching Context Profiles, and explicitly linked Knowledge are included. See [Context Assembly](docs/context-assembly.md) for selection and exclusion rules.
+Only the requested Project, matching Context Profiles, and explicitly linked Knowledge are included. See the [Context Assembly Protocol](docs/protocols/context-assembly.md) for selection and exclusion rules.
 
 Create an immutable Agent Handoff without copying chat history:
 
@@ -135,7 +135,7 @@ Read and validate it for the receiving Agent:
 pai handoff read <handoff-id> --lab examples/demo-lab
 ```
 
-See [Agent Handoff Specification v0.1](docs/agent-handoff-specification-v0.1.md) for producer, consumer, required-field, Project association, transcript-exclusion, and security rules.
+See the [Agent Handoff Protocol](docs/protocols/agent-handoff.md) for producer, consumer, required-field, Project association, transcript-exclusion, and security rules.
 
 By default, data is written to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory.
 
@@ -160,18 +160,20 @@ One field has one authority:
 
 Adapters may produce local views, but they must not create competing truth.
 
+The [External Operational Systems Protocol](docs/protocols/external-operational-systems.md) defines the planned permission, idempotency, and receipt boundary before any Todoist integration is added.
+
 ## Repository map
 
 ```text
-docs/       Design specifications
+docs/       Philosophy, architecture, data model, and protocols
 schemas/    Portable JSON Schema contracts
 examples/   Sanitized example AI Lab data
-src/        Future reference implementation
+src/        Local-first reference implementation
 ```
 
 ## Project status
 
-**Experimental / pre-v0.2.** The local-first capture loop is implemented, and minimal context assembly is being stabilized.
+**Experimental / v0.3 protocol baseline.** Capture, Context Assembly, and Agent Handoff are implemented. External operations remain a design draft.
 
 Current milestone:
 
@@ -183,7 +185,9 @@ Current milestone:
 - [x] Inbox processing loop
 - [x] Minimal context assembler
 - [x] Structured agent handoff demo
-- [ ] Todoist adapter
+- [ ] External Operational Systems v0.4.0 contracts
+- [ ] Mock Provider with permission and idempotency tests
+- [ ] Todoist Adapter, deferred to v0.4.1
 
 See the [Roadmap](docs/roadmap.md) for release milestones.
 
