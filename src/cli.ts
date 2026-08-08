@@ -2,6 +2,7 @@
 
 import path from "node:path";
 import { capture } from "./capture.js";
+import { assembleContext } from "./context.js";
 import { processInboxItem } from "./process.js";
 import type { ProcessDestination } from "./types.js";
 
@@ -42,6 +43,7 @@ function usage(): string {
     "Usage:",
     "  pai capture \"<text>\" [--lab <path>]",
     "  pai process <inbox-id> --to <project|knowledge> [--title <title>] [--lab <path>]",
+    "  pai context <project-id> --agent <agent> [--task <task>] [--knowledge-limit <number>] [--lab <path>]",
     "",
     "Environment:",
     "  PAI_LAB  Default AI Lab path (otherwise ./lab)"
@@ -92,6 +94,26 @@ async function main(): Promise<void> {
         2
       )
     );
+    return;
+  }
+
+  if (command === "context") {
+    const projectId = parsed.positional[0];
+    const agent = parsed.options.get("agent");
+    if (!projectId) throw new Error("context requires a project ID.");
+    if (!agent) throw new Error("context requires --agent.");
+
+    const knowledgeLimitText = parsed.options.get("knowledge-limit");
+    const knowledgeLimit = knowledgeLimitText === undefined ? undefined : Number(knowledgeLimitText);
+    const task = parsed.options.get("task");
+    const bundle = await assembleContext({
+      labPath,
+      projectId,
+      agent,
+      ...(task ? { task } : {}),
+      ...(knowledgeLimit !== undefined ? { knowledgeLimit } : {})
+    });
+    console.log(JSON.stringify(bundle, null, 2));
     return;
   }
 

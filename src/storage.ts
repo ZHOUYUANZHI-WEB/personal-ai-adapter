@@ -32,3 +32,20 @@ export async function writeJsonNew(filePath: string, value: unknown): Promise<vo
 export async function readJson<T>(filePath: string): Promise<T> {
   return JSON.parse(await fs.readFile(filePath, "utf8")) as T;
 }
+
+export async function listJsonFiles(labPath: string, collection: string): Promise<string[]> {
+  const collectionPath = path.join(path.resolve(labPath), collection);
+
+  try {
+    const entries = await fs.readdir(collectionPath, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+      .map((entry) => path.join(collectionPath, entry.name))
+      .sort();
+  } catch (error: unknown) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+      return [];
+    }
+    throw error;
+  }
+}

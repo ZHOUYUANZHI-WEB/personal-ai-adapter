@@ -62,6 +62,35 @@ export interface KnowledgeItem {
   updated_at: string;
 }
 
+export interface ContextProfile {
+  id: string;
+  type: "context";
+  applies_to: "global" | "agent" | "project" | "task";
+  target?: string;
+  priority: number;
+  instructions: string[];
+  preferences?: string[];
+  constraints: string[];
+  prohibited_actions: string[];
+  source_links?: string[];
+  updated_at: string;
+}
+
+export interface ContextBundle {
+  id: string;
+  type: "context_bundle";
+  created_at: string;
+  agent: string;
+  task?: string;
+  project: Project;
+  profiles: ContextProfile[];
+  knowledge: KnowledgeItem[];
+  included_sources: string[];
+  excluded_by_default: string[];
+  warnings: string[];
+  estimated_tokens: number;
+}
+
 export type ProcessDestination = "project" | "knowledge";
 
 export interface ProcessResult {

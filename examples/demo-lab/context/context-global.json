@@ -1,0 +1,19 @@
+{
+  "id": "context-global",
+  "type": "context",
+  "applies_to": "global",
+  "priority": 10,
+  "instructions": [
+    "Treat user-owned files as the durable source of truth."
+  ],
+  "preferences": [
+    "Prefer concise, recoverable workflows."
+  ],
+  "constraints": [
+    "Load only information relevant to the current task."
+  ],
+  "prohibited_actions": [
+    "Do not place secrets in ordinary content or logs."
+  ],
+  "updated_at": "2026-08-08T09:30:00Z"
+}

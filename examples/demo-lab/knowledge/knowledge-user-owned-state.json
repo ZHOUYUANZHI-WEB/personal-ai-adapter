@@ -1,0 +1,21 @@
+{
+  "id": "knowledge-user-owned-state",
+  "type": "knowledge",
+  "title": "User-owned state",
+  "status": "verified",
+  "summary": "Agents are replaceable; durable context and knowledge belong to the user.",
+  "content": "Agent memory is not a canonical store. Projects, Knowledge, Context Profiles, and structured handoffs preserve continuity across agents.",
+  "sources": [
+    "user:architecture-decision"
+  ],
+  "scope": "Personal AI Adapter architecture",
+  "confidence": "confirmed",
+  "created_by": "user",
+  "related_projects": [
+    "project:project-personal-ai-adapter"
+  ],
+  "related_knowledge": [],
+  "created_at": "2026-08-08T09:00:00Z",
+  "updated_at": "2026-08-08T09:30:00Z",
+  "reviewed_at": "2026-08-08T09:30:00Z"
+}

@@ -1,6 +1,6 @@
 {
   "name": "personal-ai-adapter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A user-owned context layer for interchangeable AI agents.",
   "type": "module",
   "bin": {
