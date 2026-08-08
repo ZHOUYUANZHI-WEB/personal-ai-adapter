@@ -87,6 +87,37 @@ Capture → Inbox → Process → Project or Knowledge
 3. Processing proposes a destination instead of forcing an immediate decision.
 4. Project stores intent and direction; Knowledge stores reusable understanding.
 
+## Quick Start
+
+Requires Node.js 20 or newer.
+
+```bash
+npm install
+npm run build
+npm link
+```
+
+Capture incomplete text without choosing a destination:
+
+```bash
+pai capture "Maybe let agents share structured state instead of chat history"
+```
+
+The command returns a stable Inbox ID. Resolve it later:
+
+```bash
+pai process <inbox-id> --to project
+pai process <inbox-id> --to knowledge --title "Structured agent handoff"
+```
+
+By default, data is written to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory.
+
+Run the automated checks with:
+
+```bash
+npm test
+```
+
 ## Data authority
 
 One field has one authority:
@@ -121,8 +152,8 @@ Current milestone:
 - [x] Human Experience principles
 - [x] Data authority model
 - [x] Initial schemas
-- [ ] Local-first capture CLI
-- [ ] Inbox processing loop
+- [x] Local-first capture CLI
+- [x] Inbox processing loop
 - [ ] Minimal context assembler
 - [ ] Structured agent handoff demo
 - [ ] Todoist adapter
@@ -144,4 +175,3 @@ The project is currently in architecture-freeze and schema-validation work. Disc
 ## License
 
 A license will be selected before the first public release.
-
