@@ -1,0 +1,31 @@
+{
+  "name": "personal-ai-adapter",
+  "version": "0.1.0",
+  "description": "A user-owned context layer for interchangeable AI agents.",
+  "type": "module",
+  "bin": {
+    "pai": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "private": true
+}

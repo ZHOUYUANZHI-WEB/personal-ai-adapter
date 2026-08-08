@@ -17,6 +17,7 @@ tmp/
 node_modules/
 dist/
 coverage/
+lab/
 
 # Editor and OS files
 .DS_Store
@@ -27,4 +28,3 @@ Thumbs.db
 # Private AI Lab instances
 *-ai-lab/
 private-lab/
-
