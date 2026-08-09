@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { objectPath, readJson, writeJsonAtomic, writeJsonNew } from "./storage.js";
+import { createObjectStore, type ObjectStore } from "./storage.js";
 import { validateObject } from "./schema.js";
 import type { InboxItem, KnowledgeItem, ProcessDestination, ProcessResult, Project } from "./types.js";
 
@@ -8,6 +8,7 @@ export interface ProcessOptions {
   to: ProcessDestination;
   title?: string;
   now?: Date;
+  store?: ObjectStore;
 }
 
 function titleFrom(content: string): string {
@@ -21,8 +22,8 @@ function newId(prefix: ProcessDestination, now: Date): string {
 }
 
 export async function processInboxItem(inboxId: string, options: ProcessOptions): Promise<ProcessResult> {
-  const inboxPath = objectPath(options.labPath, "inbox", inboxId);
-  const inbox = await readJson<InboxItem>(inboxPath);
+  const store = options.store ?? createObjectStore(options.labPath);
+  const inbox = await store.read<InboxItem>("inbox", inboxId);
   validateObject("inbox", inbox);
 
   if (inbox.status === "resolved") {
@@ -76,8 +77,7 @@ export async function processInboxItem(inboxId: string, options: ProcessOptions)
     validateObject("knowledge", destination);
   }
 
-  const destinationPath = objectPath(options.labPath, collection, destinationId);
-  await writeJsonNew(destinationPath, destination);
+  const destinationPath = await store.writeNew(collection, destinationId, destination);
 
   const resolvedInbox: InboxItem = {
     ...inbox,
@@ -86,7 +86,7 @@ export async function processInboxItem(inboxId: string, options: ProcessOptions)
     resolved_to: [`${options.to}:${destinationId}`]
   };
   validateObject("inbox", resolvedInbox);
-  await writeJsonAtomic(inboxPath, resolvedInbox);
+  await store.writeAtomic("inbox", inboxId, resolvedInbox);
 
   return { inbox: resolvedInbox, destination, destinationPath };
 }

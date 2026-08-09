@@ -49,6 +49,12 @@ Defines capture friction, decision load, interruption recovery, information dens
 
 The Core validates contracts and manages local state. It does not provide model memory, choose the next Agent, or silently execute external operations.
 
+### Object Store boundary
+
+Core workflows depend on a provider-neutral Object Store. The reference implementation offers JSON and Markdown Vault drivers, but one AI Lab may have only one writable driver. `.pai/store.json` records that choice and prevents accidental dual authority.
+
+Obsidian is an optional human interface over the Markdown Vault, not a Core dependency.
+
 ### Integration adapters
 
 Adapters translate provider-neutral operations into provider-specific API calls. Each Adapter declares authority, permissions, idempotency behavior, read/write scope, and conflict policy.

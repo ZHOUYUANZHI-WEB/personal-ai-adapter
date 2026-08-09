@@ -97,6 +97,14 @@ npm run build
 npm link
 ```
 
+Create a plugin-free Markdown Vault that can be opened directly in Obsidian:
+
+```bash
+pai lab init --store markdown --lab "/path/to/Your AI Lab"
+```
+
+The command creates the human-facing folders, `Home.md`, and starter templates without overwriting existing files. The Vault stays independent of Obsidian and does not require Dataview or another community plugin.
+
 Confirm the installed CLI version:
 
 ```bash
@@ -106,7 +114,7 @@ pai --version
 Capture incomplete text without choosing a destination:
 
 ```bash
-pai capture "Maybe let agents share structured state instead of chat history"
+pai capture "Maybe let agents share structured state instead of chat history" --store markdown --lab "/path/to/Your AI Lab"
 ```
 
 The command returns a stable Inbox ID. Resolve it later:
@@ -143,7 +151,9 @@ pai handoff read <handoff-id> --lab examples/demo-lab
 
 See the [Agent Handoff Protocol](docs/protocols/agent-handoff.md) for producer, consumer, required-field, Project association, transcript-exclusion, and security rules.
 
-By default, data is written to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory.
+By default, data is written as JSON to `./lab`. Set `PAI_LAB` or pass `--lab <path>` to use another AI Lab directory. Set `PAI_STORE=markdown` or pass `--store markdown` for a Markdown Vault.
+
+Each Lab records one writable Store in `.pai/store.json`. JSON and Markdown cannot silently become competing truth sources. See the [Storage Protocol](docs/protocols/storage.md).
 
 Run the automated checks with:
 
@@ -179,7 +189,7 @@ src/        Local-first reference implementation
 
 ## Project status
 
-**Experimental / v0.3 protocol baseline.** Capture, Context Assembly, and Agent Handoff are implemented. External operations remain a design draft.
+**Experimental / v0.3.1 protocol baseline.** Capture, Context Assembly, Agent Handoff, and Markdown Vault storage are implemented. External operations remain a design draft.
 
 Current milestone:
 
@@ -191,6 +201,8 @@ Current milestone:
 - [x] Inbox processing loop
 - [x] Minimal context assembler
 - [x] Structured agent handoff demo
+- [x] Single-authority Markdown Vault Store
+- [x] Plugin-free Obsidian-compatible Lab initialization
 - [ ] External Operational Systems v0.4.0 contracts
 - [ ] Mock Provider with permission and idempotency tests
 - [ ] Todoist Adapter, deferred to v0.4.1

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { objectPath, writeJsonNew } from "./storage.js";
+import { createObjectStore, type ObjectStore } from "./storage.js";
 import { validateObject } from "./schema.js";
 import type { InboxItem, SourceKind } from "./types.js";
 
@@ -8,6 +8,7 @@ export interface CaptureOptions {
   sourceKind?: SourceKind;
   capturedBy?: string;
   now?: Date;
+  store?: ObjectStore;
 }
 
 function compactDate(date: Date): string {
@@ -34,7 +35,7 @@ export async function capture(content: string, options: CaptureOptions): Promise
   };
 
   validateObject("inbox", item);
-  const destinationPath = objectPath(options.labPath, "inbox", id);
-  await writeJsonNew(destinationPath, item);
+  const store = options.store ?? createObjectStore(options.labPath);
+  const destinationPath = await store.writeNew("inbox", id, item);
   return { item, path: destinationPath };
 }
