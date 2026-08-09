@@ -97,6 +97,12 @@ npm run build
 npm link
 ```
 
+Confirm the installed CLI version:
+
+```bash
+pai --version
+```
+
 Capture incomplete text without choosing a destination:
 
 ```bash

@@ -2,6 +2,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { capture } from "./capture.js";
 import { assembleContext } from "./context.js";
 import { asHandoffPayload, createHandoff, readHandoff } from "./handoff.js";
@@ -38,11 +39,21 @@ function parseArgs(args: string[]): ParsedArgs {
   return { positional, options };
 }
 
-function usage(): string {
+async function packageVersion(): Promise<string> {
+  const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "package.json");
+  const packageData = JSON.parse(await fs.readFile(packagePath, "utf8")) as { version?: unknown };
+  if (typeof packageData.version !== "string" || packageData.version.length === 0) {
+    throw new Error("Package version is missing or invalid.");
+  }
+  return packageData.version;
+}
+
+function usage(version: string): string {
   return [
-    "Personal AI Adapter v0.1",
+    `Personal AI Adapter v${version}`,
     "",
     "Usage:",
+    "  pai --version",
     "  pai capture \"<text>\" [--lab <path>]",
     "  pai process <inbox-id> --to <project|knowledge> [--title <title>] [--lab <path>]",
     "  pai context <project-id> --agent <agent> [--task <task>] [--knowledge-limit <number>] [--lab <path>]",
@@ -69,8 +80,13 @@ function parseJsonInput(content: string): unknown {
 
 async function main(): Promise<void> {
   const [command, ...rest] = process.argv.slice(2);
+  if (command === "--version" || command === "version") {
+    console.log(await packageVersion());
+    return;
+  }
+
   if (!command || command === "help" || command === "--help") {
-    console.log(usage());
+    console.log(usage(await packageVersion()));
     return;
   }
 
@@ -180,7 +196,7 @@ async function main(): Promise<void> {
     throw new Error("handoff requires create or read.");
   }
 
-  throw new Error(`Unknown command: ${command}\n\n${usage()}`);
+  throw new Error(`Unknown command: ${command}\n\n${usage(await packageVersion())}`);
 }
 
 main().catch((error: unknown) => {
