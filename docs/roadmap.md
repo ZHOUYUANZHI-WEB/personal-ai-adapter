@@ -23,6 +23,14 @@
 - required state, Artifact, decision, risk, and permission fields
 - transcript exclusion and total size bound
 
+### v0.3.1 - Markdown Vault compatibility
+
+- provider-neutral Object Store boundary
+- JSON compatibility Store
+- Markdown plus YAML Front Matter Vault Store
+- single writable Store manifest
+- idempotent, plugin-free AI Lab initialization
+
 ## Next
 
 ### v0.4.0 - External Operational Systems protocol
@@ -48,7 +56,7 @@ No real external provider is required for v0.4.0.
 ## Later
 
 - Calendar, GitHub, and Email Adapters
-- Markdown Vault Store and optional Obsidian interface
+- optional Obsidian-specific interface enhancements
 - rebuildable semantic retrieval
 - Knowledge deduplication and contradiction detection
 - optional graphical capture interface

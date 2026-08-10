@@ -88,8 +88,10 @@ Handoff requires one Project reference and contains only continuation state. It 
 
 One field must not have two writable authorities.
 
-## Storage direction
+## Storage
 
-The current reference implementation stores validated JSON files. A future Markdown Vault Store may expose human-owned content as Markdown plus YAML Front Matter, but only one configured Store may be writable and authoritative for an AI Lab.
+The reference implementation supports validated JSON files and a Markdown Vault Store using YAML Front Matter. Each AI Lab declares exactly one writable Store in `.pai/store.json`; selecting another driver fails rather than creating a competing truth.
 
-Indexes, caches, and alternate views must remain derived.
+In the Markdown Store, structured fields live in Front Matter and the `content` field, when present, lives in the Markdown body. Indexes, caches, exports, and alternate views remain derived.
+
+See the [Storage Protocol](protocols/storage.md) for path mapping, initialization, and compatibility rules.

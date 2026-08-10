@@ -1,6 +1,5 @@
 import crypto from "node:crypto";
-import path from "node:path";
-import { listJsonFiles, objectPath, readJson } from "./storage.js";
+import { createObjectStore, type ObjectStore } from "./storage.js";
 import { validateObject } from "./schema.js";
 import type { ContextBundle, ContextProfile, KnowledgeItem, Project } from "./types.js";
 
@@ -11,6 +10,7 @@ export interface AssembleContextOptions {
   task?: string;
   knowledgeLimit?: number;
   now?: Date;
+  store?: ObjectStore;
 }
 
 function targetMatches(profile: ContextProfile, options: AssembleContextOptions): boolean {
@@ -62,13 +62,13 @@ export async function assembleContext(options: AssembleContextOptions): Promise<
     throw new Error("Knowledge limit must be a non-negative integer.");
   }
 
-  const projectPath = objectPath(options.labPath, "projects", options.projectId);
-  const project = await readJson<Project>(projectPath);
+  const store = options.store ?? createObjectStore(options.labPath);
+  const project = await store.read<Project>("projects", options.projectId);
   validateObject("project", project);
 
   const profiles: ContextProfile[] = [];
-  for (const profilePath of await listJsonFiles(options.labPath, "context")) {
-    const profile = await readJson<ContextProfile>(profilePath);
+  for (const stored of await store.list<ContextProfile>("context")) {
+    const profile = stored.value;
     validateObject("context", profile);
     if (targetMatches(profile, options)) {
       profiles.push(profile);
@@ -87,9 +87,8 @@ export async function assembleContext(options: AssembleContextOptions): Promise<
       continue;
     }
 
-    const itemPath = objectPath(options.labPath, "knowledge", id);
     try {
-      const item = await readJson<KnowledgeItem>(itemPath);
+      const item = await store.read<KnowledgeItem>("knowledge", id);
       validateObject("knowledge", item);
       knowledge.push(item);
     } catch (error: unknown) {

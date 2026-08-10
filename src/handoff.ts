@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { objectPath, readJson, writeJsonNew } from "./storage.js";
+import { createObjectStore, type ObjectStore } from "./storage.js";
 import { validateObject } from "./schema.js";
 import type { HandoffArtifact, HandoffPayload, Project } from "./types.js";
 
@@ -9,6 +9,7 @@ export interface CreateHandoffOptions {
   fromAgent: string;
   recommendedNextAgent?: string;
   now?: Date;
+  store?: ObjectStore;
 }
 
 const maximumHandoffBytes = 32 * 1024;
@@ -40,8 +41,8 @@ export async function createHandoff(
     throw new Error("Producing Agent cannot be empty.");
   }
 
-  const projectPath = objectPath(options.labPath, "projects", options.projectId);
-  const project = await readJson<Project>(projectPath);
+  const store = options.store ?? createObjectStore(options.labPath);
+  const project = await store.read<Project>("projects", options.projectId);
   validateObject("project", project);
 
   if (project.id !== options.projectId) {
@@ -63,14 +64,16 @@ export async function createHandoff(
 
   validateObject("handoff", handoff);
   assertArtifactSize(handoff);
-  const handoffPath = objectPath(options.labPath, "handoffs", handoff.id as string);
-  await writeJsonNew(handoffPath, handoff);
+  const handoffPath = await store.writeNew("handoffs", handoff.id as string, handoff);
   return { handoff: handoff as unknown as HandoffArtifact, path: handoffPath };
 }
 
-export async function readHandoff(handoffIdValue: string, labPath: string): Promise<HandoffArtifact> {
-  const handoffPath = objectPath(labPath, "handoffs", handoffIdValue);
-  const handoff = await readJson<HandoffArtifact>(handoffPath);
+export async function readHandoff(
+  handoffIdValue: string,
+  labPath: string,
+  store: ObjectStore = createObjectStore(labPath)
+): Promise<HandoffArtifact> {
+  const handoff = await store.read<HandoffArtifact>("handoffs", handoffIdValue);
   validateObject("handoff", handoff);
   assertArtifactSize(handoff);
   return handoff;

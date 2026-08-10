@@ -6,7 +6,9 @@ import { fileURLToPath } from "node:url";
 import { capture } from "./capture.js";
 import { assembleContext } from "./context.js";
 import { asHandoffPayload, createHandoff, readHandoff } from "./handoff.js";
+import { initializeLab } from "./lab.js";
 import { processInboxItem } from "./process.js";
+import { createObjectStore, parseStoreDriver } from "./storage.js";
 import type { ProcessDestination } from "./types.js";
 
 interface ParsedArgs {
@@ -54,14 +56,16 @@ function usage(version: string): string {
     "",
     "Usage:",
     "  pai --version",
-    "  pai capture \"<text>\" [--lab <path>]",
-    "  pai process <inbox-id> --to <project|knowledge> [--title <title>] [--lab <path>]",
-    "  pai context <project-id> --agent <agent> [--task <task>] [--knowledge-limit <number>] [--lab <path>]",
-    "  pai handoff create --project <project-id> --from <agent> --input <file|-> [--to <agent>] [--lab <path>]",
-    "  pai handoff read <handoff-id> [--lab <path>]",
+    "  pai lab init [--store <json|markdown>] [--lab <path>]",
+    "  pai capture \"<text>\" [--store <json|markdown>] [--lab <path>]",
+    "  pai process <inbox-id> --to <project|knowledge> [--title <title>] [--store <json|markdown>] [--lab <path>]",
+    "  pai context <project-id> --agent <agent> [--task <task>] [--knowledge-limit <number>] [--store <json|markdown>] [--lab <path>]",
+    "  pai handoff create --project <project-id> --from <agent> --input <file|-> [--to <agent>] [--store <json|markdown>] [--lab <path>]",
+    "  pai handoff read <handoff-id> [--store <json|markdown>] [--lab <path>]",
     "",
     "Environment:",
-    "  PAI_LAB  Default AI Lab path (otherwise ./lab)"
+    "  PAI_LAB    Default AI Lab path (otherwise ./lab)",
+    "  PAI_STORE  Default Store driver (otherwise json)"
   ].join("\n");
 }
 
@@ -92,10 +96,18 @@ async function main(): Promise<void> {
 
   const parsed = parseArgs(rest);
   const labPath = path.resolve(parsed.options.get("lab") ?? process.env.PAI_LAB ?? "lab");
+  const storeDriver = parseStoreDriver(parsed.options.get("store") ?? process.env.PAI_STORE ?? "json");
+  const store = createObjectStore(labPath, storeDriver);
+
+  if (command === "lab") {
+    if (parsed.positional[0] !== "init") throw new Error("lab requires init.");
+    console.log(JSON.stringify(await initializeLab({ labPath, driver: storeDriver }), null, 2));
+    return;
+  }
 
   if (command === "capture") {
     const content = parsed.positional.join(" ");
-    const result = await capture(content, { labPath });
+    const result = await capture(content, { labPath, store });
     console.log(JSON.stringify({ id: result.item.id, status: result.item.status, path: result.path }, null, 2));
     return;
   }
@@ -111,6 +123,7 @@ async function main(): Promise<void> {
     const title = parsed.options.get("title");
     const result = await processInboxItem(inboxId, {
       labPath,
+      store,
       to: to as ProcessDestination,
       ...(title ? { title } : {})
     });
@@ -141,6 +154,7 @@ async function main(): Promise<void> {
     const task = parsed.options.get("task");
     const bundle = await assembleContext({
       labPath,
+      store,
       projectId,
       agent,
       ...(task ? { task } : {}),
@@ -166,6 +180,7 @@ async function main(): Promise<void> {
       const nextAgent = parsed.options.get("to");
       const result = await createHandoff(payload, {
         labPath,
+        store,
         projectId,
         fromAgent,
         ...(nextAgent ? { recommendedNextAgent: nextAgent } : {})
@@ -189,7 +204,7 @@ async function main(): Promise<void> {
     if (action === "read") {
       const handoffIdValue = parsed.positional[1];
       if (!handoffIdValue) throw new Error("handoff read requires a Handoff ID.");
-      console.log(JSON.stringify(await readHandoff(handoffIdValue, labPath), null, 2));
+      console.log(JSON.stringify(await readHandoff(handoffIdValue, labPath, store), null, 2));
       return;
     }
 
